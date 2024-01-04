@@ -2,7 +2,7 @@
 
 interface CommentsRepositoryInterface 
 {
-    public function save($article);
+    public function save($comment);
     public function get($uuid);
 }
 
