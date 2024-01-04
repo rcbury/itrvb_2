@@ -1,0 +1,11 @@
+{
+    "name": "lab/3",
+    "autoload": {
+        "psr-4": {
+            "lab3\\": "src/"
+        }
+    },
+    "require": {
+        "fakerphp/faker": "^1.23"
+    }
+}
