@@ -34,7 +34,7 @@ class SQLiteCommentsRepository implements CommentsRepositoryInterface
     
     public function get(string $uuid) 
     {
-		$query = $this->db->prepare('SELECT * from comments where uuid=:uuid');
+		$query = $this->db->prepare('SELECT * FROM comments WHERE uuid=:uuid');
 		$query->bindValue(':uuid', $uuid);
 		$result = $query->execute();
 		if ($result === false) {

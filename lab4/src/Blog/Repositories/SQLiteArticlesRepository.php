@@ -34,7 +34,7 @@ class SQLiteArticlesRepository implements ArticlesRepositoryInterface
 
     public function get(string $uuid) 
     {
-		$query = $this->db->prepare('SELECT * from articles where uuid=:uuid');
+		$query = $this->db->prepare('SELECT * FROM articles WHERE uuid=:uuid');
 		$query->bindValue(':uuid', $uuid);
 		$result = $query->execute();
 		if ($result === false) {
@@ -55,7 +55,7 @@ class SQLiteArticlesRepository implements ArticlesRepositoryInterface
 
     public function delete(string $uuid)
 	{
-		$query = $this->db->prepare('DELETE from articles where uuid=:uuid');
+		$query = $this->db->prepare('DELETE FROM articles WHERE uuid=:uuid');
 		$query->bindValue(':uuid', $uuid);
 		$result = $query->execute();
 		if ($result === false) {

@@ -6,6 +6,8 @@ use lab3\Blog\Http\Actions\Comments\GetComment;
 use lab3\Blog\Http\Actions\Articles\CreateArticle;
 use lab3\Blog\Http\Actions\Articles\DeleteArticle;
 use lab3\Blog\Http\Actions\Articles\GetArticle;
+use lab3\Blog\Http\Actions\Articles\GetArticleLikes;
+use lab3\Blog\Http\Actions\ArticleLikes\LikeArticle;
 use lab3\Blog\Http\ErrorResponse;
 use lab3\Blog\Http\Request;
 
@@ -15,12 +17,14 @@ $routes = [
 	'GET' => 
 	[
 		'/posts' => GetArticle::class,
-		'/comment' => GetComment::class
+		'/comment' => GetComment::class,
+		'/likes' => GetArticleLikes::class
 	],
 	'POST' => 
 	[
 		'/posts/comment' => CreateComment::class,
-		'/posts' => CreateArticle::class
+		'/posts' => CreateArticle::class,
+		'/posts/like' => LikeArticle::class
 	],
 	'DELETE' => 
 	[
