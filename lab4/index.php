@@ -5,9 +5,9 @@ namespace lab3;
 require 'src/custom_autoloader.php';
 require 'vendor/autoload.php';
 
-use Shop\Article;
-use Shop\Comment;
-use Shop\User;
+use lab3\Blog\Article;
+use lab3\Blog\Comment;
+use lab3\Blog\User;
 use Faker\Factory;
 
 $faker = Factory::create();
