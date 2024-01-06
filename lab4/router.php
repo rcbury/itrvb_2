@@ -29,9 +29,7 @@ $routes = [
 ];
 
 $request = new Request($_GET, $_SERVER, file_get_contents('php://input'));
-
 $path = $request->path();
-
 $method = $request->method();
 
 if (!array_key_exists($method, $routes) || !array_key_exists($path, $routes[$method])) {
@@ -41,7 +39,6 @@ if (!array_key_exists($method, $routes) || !array_key_exists($path, $routes[$met
 }
 
 $actionClassName = $routes[$method][$path];
-
 $action = $di_container->get($actionClassName);
 
 try {
