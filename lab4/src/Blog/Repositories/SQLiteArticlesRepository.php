@@ -2,6 +2,7 @@
 
 namespace lab3\Blog\Repositories;
 
+use Psr\Log\LoggerInterface;
 use lab3\Blog\Interfaces\ArticlesRepositoryInterface;
 use lab3\Blog\Article;
 use lab3\Blog\Exceptions\EntityNotFoundException;
@@ -10,14 +11,18 @@ use SQLite3;
 class SQLiteArticlesRepository implements ArticlesRepositoryInterface
 {
     public SQLite3 $db;
+	private LoggerInterface $logger;
 
-	public function __construct(SQLite3 $db = null)
+	public function __construct(SQLite3 $db = null, LoggerInterface $logger)
 	{
 		$this->db = $db;
+		$this->logger = $logger;
 	}
 
     public function save(Article $article) 
     {
+		$this->logger->info("Article save ".$article->uuid);
+
 		$query = $this->db->prepare(
 			'INSERT INTO articles (uuid, header, content, author_uuid)
 			VALUES(:uuid, :header, :content, :author_uuid) 
@@ -38,10 +43,12 @@ class SQLiteArticlesRepository implements ArticlesRepositoryInterface
 		$query->bindValue(':uuid', $uuid);
 		$result = $query->execute();
 		if ($result === false) {
+			$this->logger->warning("Article not found ".$uuid);
 			throw new EntityNotFoundException();
 		}
 		$result = $result->fetchArray(SQLITE3_ASSOC);
 		if ($result === false) {
+			$this->logger->warning("Article not found ".$uuid);
 			throw new EntityNotFoundException();
 		}
 		$article = new Article(

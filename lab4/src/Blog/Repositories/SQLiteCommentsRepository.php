@@ -2,6 +2,7 @@
 
 namespace lab3\Blog\Repositories;
 
+use Psr\Log\LoggerInterface;
 use lab3\Blog\Interfaces\CommentsRepositoryInterface;
 use lab3\Blog\Comment;
 use lab3\Blog\Exceptions\EntityNotFoundException;
@@ -10,14 +11,18 @@ use SQLite3;
 class SQLiteCommentsRepository implements CommentsRepositoryInterface
 {
     public SQLite3 $db;
+	private LoggerInterface $logger;
 
-	public function __construct(SQLite3 $db = null)
+	public function __construct(SQLite3 $db = null, LoggerInterface $logger)
 	{
 		$this->db = $db;
+		$this->logger = $logger;
 	}
 
     public function save(Comment $comment) 
     {
+		$this->logger->info("Comment save ".$article->uuid);
+
         $query = $this->db->prepare(
 			'INSERT INTO comments (uuid, article_uuid, content, author_uuid)
 			VALUES (:uuid, :article_uuid, :content, :author_uuid) 
@@ -38,10 +43,12 @@ class SQLiteCommentsRepository implements CommentsRepositoryInterface
 		$query->bindValue(':uuid', $uuid);
 		$result = $query->execute();
 		if ($result === false) {
+			$this->logger->warning("Comment not found ".$uuid);
 			throw new EntityNotFoundException();
 		}
 		$result = $result->fetchArray(SQLITE3_ASSOC);
 		if ($result === false) {
+			$this->logger->warning("Comment not found ".$uuid);
 			throw new EntityNotFoundException();
 		}
 		$comment = new Comment(

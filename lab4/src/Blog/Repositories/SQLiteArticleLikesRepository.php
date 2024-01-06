@@ -2,6 +2,7 @@
 
 namespace lab3\Blog\Repositories;
 
+use Psr\Log\LoggerInterface;
 use lab3\Blog\Interfaces\ArticleLikesRepositoryInterface;
 use lab3\Blog\ArticleLike;
 use lab3\Blog\Exceptions\EntityNotFoundException;
@@ -11,14 +12,17 @@ use SQLite3;
 class SQLiteArticleLikesRepository implements ArticleLikesRepositoryInterface
 {
     public SQLite3 $db;
+	private LoggerInterface $logger;
 
-	public function __construct(SQLite3 $db = null)
+	public function __construct(SQLite3 $db = null, LoggerInterface $logger)
 	{
 		$this->db = $db;
+		$this->logger = $logger;
 	}
 
     public function save(ArticleLike $like) 
     {
+		$this->logger->info("Article like save ".$like->uuid);
 
 		$result = $this->isLikeExists($like->article_uuid, $like->user_uuid);
 
@@ -78,6 +82,7 @@ class SQLiteArticleLikesRepository implements ArticleLikesRepositoryInterface
 		$query->bindValue(':uuid', $uuid);
 		$result = $query->execute();
 		if ($result === false) {
+			$this->logger->warning("Likes for object not found ".$uuid);
 			throw new EntityNotFoundException();
 		}
 		$likes = [];

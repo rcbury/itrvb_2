@@ -7,6 +7,7 @@ use lab3\Blog\Article;
 use lab3\Blog\Exceptions\EntityNotFoundException;
 use lab3\Blog\Repositories\SQLiteArticlesRepository;
 use PHPUnit\Framework\TestCase;
+use Tests\LoggerMock;
 use SQLite3Result;
 use SQLite3Stmt;
 
@@ -20,7 +21,7 @@ final class SQLiteArticlesRepositoryTest extends TestCase
 		$query = $this->createMock(SQLite3Stmt::class);
 		$query->expects($this->once())->method('execute')->with();
 		$conn->method('prepare')->WillReturn($query);
-		$repository = new SQLiteArticlesRepository($conn);
+		$repository = new SQLiteArticlesRepository($conn, new LoggerMock);
 		$article = new Article('xxx', 'xxx', 'xxx', 'xxx');
 
 		$repository->save($article);
@@ -42,7 +43,7 @@ final class SQLiteArticlesRepositoryTest extends TestCase
 				]
 			);
 		$conn->method('prepare')->WillReturn($query);
-		$repository = new SQLiteArticlesRepository($conn);
+		$repository = new SQLiteArticlesRepository($conn, new LoggerMock);
 		$article = new Article('xxx', 'xxx', 'xxx', 'xxx');
 
 		$result = $repository->get('xxx');
@@ -56,7 +57,7 @@ final class SQLiteArticlesRepositoryTest extends TestCase
 		$query = $this->createStub(SQLite3Stmt::class);
 		$query->method('execute')->willReturn(false);
 		$conn->method('prepare')->willReturn($query);
-		$repository = new SQLiteArticlesRepository($conn);
+		$repository = new SQLiteArticlesRepository($conn, new LoggerMock);
 		$this->expectException(EntityNotFoundException::class);
 
 		$uuid = "xxxx";
